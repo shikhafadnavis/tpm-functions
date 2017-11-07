@@ -12,11 +12,33 @@ def listKeys():
 	print ("type of stdout is: ", type(op.stdout))
 	return op
 
+def generateGPGkeys():
+	# generate randomness
+	Popen(["sudo", "rngd", "-r", "/dev/urandom"])
+
+	# generate GPG keys
+	op = Popen(["gpg", "--gen-key"], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+	for line in op.stdout:
+		if line.startswith("Your selection?"):
+			answer = 1
+		elif line.startswith("What keysize do you want?"):
+			answer = 2048
+		elif line.startswith("Key is valid for?"):
+			answer = 0
+		elif line.startswith("Is this correct?"):
+			answer = y 
+		else:
+			break
+
+		print(answer, op.stdin)
+		op.stdin.flush()
+		
+
 
 def main():
 	output = listKeys()
-	if (output is not None):
-        	print output.stdout.readlines()
+        print output.stdout.readlines()
+	generateGPGkeys()
 
 
 
