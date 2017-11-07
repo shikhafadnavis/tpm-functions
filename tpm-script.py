@@ -3,18 +3,20 @@
 # Authors : Shikha Fadnavis and Venkatesh Gopal (Johns Hopkins University, Information Security Institute)
 
 
-import subprocess
+from subprocess import Popen, PIPE
 
+# Trial function
 def listKeys(): 
-	op = subprocess.call(["gpg", "--list-keys"])
+	op = Popen(["gpg", "--list-keys"], stdin = PIPE, stdout = PIPE)
+	print ("stdout is: ", op.stdout.readlines()[2])
+	print ("type of stdout is: ", type(op.stdout))
 	return op
 
 
 def main():
 	output = listKeys()
-        print output
-        print type(output)
-	print "hello"
+	if (output is not None):
+        	print output.stdout.readlines()
 
 
 
