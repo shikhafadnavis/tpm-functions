@@ -5,11 +5,12 @@
 
 from subprocess import Popen, PIPE
 
-# Trial function
+
 def listKeys(): 
 	op = Popen(["gpg", "--list-keys"], stdin = PIPE, stdout = PIPE)
-	print ("stdout is: ", op.stdout.readlines()[2])
-	print ("type of stdout is: ", type(op.stdout))
+	print op.stdout.readlines()
+	#print ("stdout is: ", op.stdout.readlines()[2])
+	#print ("type of stdout is: ", type(op.stdout))
 	return op
 
 def generateGPGkeys():
@@ -32,13 +33,37 @@ def generateGPGkeys():
 
 		print(answer, op.stdin)
 		op.stdin.flush()
-		
 
+def encryptData():
+	op = Popen(["gpg", "--encrypt", "--recipient", "sfadnav1@jhu.edu", "plaintext.txt"], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+	for line in op.stdout:
+		if line.startswith("Use this key anyway?"):
+			answer = y	
+
+	print(answer, op.stdin)
+	op.stdin.flush()
+
+def decryptData():
+	op = Popen(["gpg", "--decrypt", "plaintext.txt.gpg"])
 
 def main():
-	output = listKeys()
-        print output.stdout.readlines()
-	generateGPGkeys()
+	print "Please select one of the following choices: "
+	print "1. List available GPG keys \n2. Generate GPG Keys \n3. Encrypt data \n4. Decrypt data \n"
+	choice  = raw_input("Enter your choice here: ")
+
+	if choice == '1':
+		listKeys()
+	elif choice == '2':
+		generateGPGkeys()
+	elif choice == '3':
+		encryptData() 
+	elif choice == '4':
+		decryptData()
+	else:
+		print "Wrong Choice" 
+
+	#output = listKeys()
+        #print output.stdout.readlines()
 
 
 
