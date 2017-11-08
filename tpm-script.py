@@ -46,9 +46,19 @@ def encryptData():
 def decryptData():
 	op = Popen(["gpg", "--decrypt", "plaintext.txt.gpg"])
 
+def encryptPrivateKeysUsingTPM():
+
+	op = Popen(["tpm_sealdata", "--infile", "privateKet.asc", "--outfile","keyblob", "--pcr", "0", "--pcr", "7"], stdin=PIPE, stdout=PIPE,universal_newlines=True)
+	
+
+def decryptPrivateKeyUsingTPM():
+
+	op = Popen(["tpm_unsealdata", "--infile", "keyblob", "--outfile", "unseadledPrivate.key"], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+
 def main():
 	print "Please select one of the following choices: "
-	print "1. List available GPG keys \n2. Generate GPG Keys \n3. Encrypt data \n4. Decrypt data \n"
+	print "1. List available GPG keys \n2. Generate GPG Keys \n3. Encrypt data \n4. Decrypt data \n 5. Encrypt Private keys using key in the TPM \n "
+	"6. Decrypt the private key using the key on the TPM \n"
 	choice  = raw_input("Enter your choice here: ")
 
 	if choice == '1':
@@ -59,11 +69,13 @@ def main():
 		encryptData() 
 	elif choice == '4':
 		decryptData()
+	elif choice == '5':
+		encryptPrivateKeysUsingTPM()
+	elif choice == '6':
+		decryptPrivateKeyUsingTPM()
 	else:
 		print "Wrong Choice" 
 
-	#output = listKeys()
-        #print output.stdout.readlines()
 
 
 

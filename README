@@ -1,3 +1,9 @@
+Usage :
+
+python tpm-script.py
+
+Details :
+
 This module implements TPM command line functionality in Python.
 ====================================================================
 It comprises of 5 functions:
@@ -8,3 +14,11 @@ It comprises of 5 functions:
 5. Decrypt GPG keys using TPM SRK
 
 =====================================================================
+
+We create absrtraction of modules such as Trousers to implement PKCS #11 functionality. 
+TPM-emulator software is used to test out of the box functionality
+
+
+License :
+
+Code belongs to Shikha Fadnavis (sfadnav1@jhu.edu) and  Venkatesh Gopal (vgopal3@jhu.edu/vnktshgopalg@gmail.com). For modifications to the source code, please reach out to this email address.
