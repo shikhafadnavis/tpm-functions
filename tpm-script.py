@@ -47,9 +47,18 @@ def decryptData():
 	op = Popen(["gpg", "--decrypt", "plaintext.txt.gpg"])
 
 def encryptPrivateKeysUsingTPM():
+	_helper_ExportPrivateKey()
+	_helper_ExportPublicKey()
 
 	op = Popen(["tpm_sealdata", "--infile", "privateKet.asc", "--outfile","keyblob", "--pcr", "0", "--pcr", "7"], stdin=PIPE, stdout=PIPE,universal_newlines=True)
 	
+def _helper_ExportPrivateKey():
+
+	op = Popen(["gpg", "--export-secret-keys", "-a", "1E2214B6", ">", "privatekey.asc"])
+
+def _helper_ExportPublicKey():
+	
+	op = Popen(["gpg", "--armor", "--export", "venky@venky", ">", "publicKey.asc"])
 
 def decryptPrivateKeyUsingTPM():
 
