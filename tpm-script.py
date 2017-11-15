@@ -74,11 +74,11 @@ def encryptPrivateKeysUsingTPM(Identity,EmailID):
 
 	return userEncryptedPrivateKetFileNameHelper
 	
-def _helper_ExportPrivateKey():
+def _helper_ExportPrivateKey(Identity,userPrivateKeyFileNameHelper):
 
 	op = Popen(["gpg", "--export-secret-keys", "-a", Identity, ">", userPrivateKeyFileNameHelper])
 
-def _helper_ExportPublicKey():
+def _helper_ExportPublicKey(EmailID,userPublicKeyFileNameHelper):
 	
 	op = Popen(["gpg", "--armor", "--export", EmailID, ">",userPublicKeyFileNameHelper])
 
