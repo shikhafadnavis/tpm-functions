@@ -65,12 +65,12 @@ def encryptPrivateKeysUsingTPM(Identity,EmailID):
 
 	userPublicKeyFileNameHelper = EmailID + "_publickey.asc"
 	userPrivateKeyFileNameHelper = EmailID + "privatekey.asc"
-	userEncryptedPrivateKetFileNameHelper = EmaildID + "_keyblob"
+	userEncryptedPrivateKeyFileNameHelper = EmaildID + "_keyblob"
 
 	_helper_ExportPrivateKey(Identity,userPrivateKeyFileNameHelper)
 	_helper_ExportPublicKey(EmailID,userPublicKeyFileNameHelper)
 
-	op = Popen(["tpm_sealdata", "--infile", userPrivateKeyFileNameHelper, "--outfile",userEncryptedPrivateKetFileNameHelper, "--pcr", "0", "--pcr", "7"], stdin=PIPE, stdout=PIPE,universal_newlines=True)
+	op = Popen(["tpm_sealdata", "--infile", userPrivateKeyFileNameHelper, "--outfile",userEncryptedPrivateKeyFileNameHelper, "--pcr", "0", "--pcr", "7"], stdin=PIPE, stdout=PIPE,universal_newlines=True)
 
 	return userEncryptedPrivateKetFileNameHelper
 	
@@ -88,7 +88,7 @@ def decryptPrivateKeyUsingTPM(fileName_keyblob):
 
 	op = Popen(["tpm_unsealdata", "--infile", fileName_keyblob, "--outfile", outputFileName], stdin=PIPE, stdout=PIPE, universal_newlines=True)
 
-	return outFileName
+	return outputFileName
 
 def main():
 	print "Please select one of the following choices: "
