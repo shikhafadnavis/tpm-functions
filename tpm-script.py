@@ -5,7 +5,7 @@
 
 from subprocess import Popen, PIPE
 import os.path
-
+import getpass
 import random, string
 
 def randomword(length):
@@ -42,9 +42,9 @@ def generateGPGkeys():
 		op.stdin.flush()
 
 def encryptData(filename):
-#	op = Popen(["gpg", "--encrypt", "--recipient", "sfadnav1@jhu.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+	op = Popen(["gpg", "--encrypt", "--recipient", "sfadnav1@jhu.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
 
-	op = Popen(["gpg2", "--encrypt", "--recipient", "sfad@jh.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+#	op = Popen(["gpg2", "--encrypt", "--recipient", "sfad@jh.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
 
 	for line in op.stdout:
 		if line.startswith("Use this key anyway?"):
@@ -54,12 +54,10 @@ def encryptData(filename):
 	op.stdin.flush()
 
 def decryptData():
-	op = Popen(["gpg2", "--decrypt", "plaintext2.txt.gpg"])
-#	for line in op.stdout:
-#		if line.startswith("Please enter"):
-#			answer = "password"
-#	print(answer, op.stdin)
-#	op.stdin.flush()
+#	password = raw_input("Enter the password to your private key")
+	password = getpass.getpass()
+	op = Popen(["gpg","--passphrase", password, "--decrypt", "plaintext2.txt.gpg"])
+
 
 def encryptPrivateKeysUsingTPM(Identity,EmailID):
 
