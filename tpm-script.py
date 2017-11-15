@@ -4,7 +4,13 @@
 
 
 from subprocess import Popen, PIPE
+import os.path
 
+import random, string
+
+def randomword(length):
+   letters = string.ascii_lowercase
+   return ''.join(random.choice(letters) for i in range(length))
 
 def listKeys(): 
 	op = Popen(["gpg", "--list-keys"], stdin = PIPE, stdout = PIPE)
@@ -34,8 +40,8 @@ def generateGPGkeys():
 		print(answer, op.stdin)
 		op.stdin.flush()
 
-def encryptData():
-	op = Popen(["gpg", "--encrypt", "--recipient", "sfadnav1@jhu.edu", "plaintext.txt"], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+def encryptData(filename):
+	op = Popen(["gpg", "--encrypt", "--recipient", "sfadnav1@jhu.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
 	for line in op.stdout:
 		if line.startswith("Use this key anyway?"):
 			answer = y	
@@ -46,23 +52,34 @@ def encryptData():
 def decryptData():
 	op = Popen(["gpg", "--decrypt", "plaintext.txt.gpg"])
 
-def encryptPrivateKeysUsingTPM():
-	_helper_ExportPrivateKey()
-	_helper_ExportPublicKey()
+def encryptPrivateKeysUsingTPM(Identity,EmailID):
 
-	op = Popen(["tpm_sealdata", "--infile", "privateKet.asc", "--outfile","keyblob", "--pcr", "0", "--pcr", "7"], stdin=PIPE, stdout=PIPE,universal_newlines=True)
+	userPublicKeyFileNameHelper = EmailID + "_publickey.asc"
+	userPrivateKeyFileNameHelper = EmailID + "privatekey.asc"
+	userEncryptedPrivateKetFileNameHelper = EmaildID + "_keyblob"
+
+	_helper_ExportPrivateKey(Identity,userPrivateKeyFileNameHelper)
+	_helper_ExportPublicKey(EmailID,userPublicKeyFileNameHelper)
+
+	op = Popen(["tpm_sealdata", "--infile", userPrivateKeyFileNameHelper, "--outfile",userEncryptedPrivateKetFileNameHelper, "--pcr", "0", "--pcr", "7"], stdin=PIPE, stdout=PIPE,universal_newlines=True)
+
+	return userEncryptedPrivateKetFileNameHelper
 	
 def _helper_ExportPrivateKey():
 
-	op = Popen(["gpg", "--export-secret-keys", "-a", "1E2214B6", ">", "privatekey.asc"])
+	op = Popen(["gpg", "--export-secret-keys", "-a", Identity, ">", userPrivateKeyFileNameHelper])
 
 def _helper_ExportPublicKey():
 	
-	op = Popen(["gpg", "--armor", "--export", "venky@venky", ">", "publicKey.asc"])
+	op = Popen(["gpg", "--armor", "--export", EmailID, ">",userPublicKeyFileNameHelper])
 
-def decryptPrivateKeyUsingTPM():
+def decryptPrivateKeyUsingTPM(fileName_keyblob):
 
-	op = Popen(["tpm_unsealdata", "--infile", "keyblob", "--outfile", "unseadledPrivate.key"], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+	outputFileName = randomword(10) + "_unsealedPrivate.key"
+
+	op = Popen(["tpm_unsealdata", "--infile", fileName_keyblob, "--outfile", outputFileName], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+
+	return outFileName
 
 def main():
 	print "Please select one of the following choices: "
@@ -75,13 +92,27 @@ def main():
 	elif choice == '2':
 		generateGPGkeys()
 	elif choice == '3':
-		encryptData() 
+		filename = raw_input("Enter the name of the file to be encrypted")
+		if os.path.isfile(filename):
+			encryptData(filename)
+		else:
+			print "File not found!"
+			 
 	elif choice == '4':
 		decryptData()
 	elif choice == '5':
-		encryptPrivateKeysUsingTPM()
+		Identity = raw_input("\nEnter the identity for the public key generation\n")
+		# We need to put checks if the Email ID's and filename's exist
+                # Have to figure out a way for that
+		EmailID = raw_input("\nEnter the Email ID\n")
+		
+		encryptedFileName = encryptPrivateKeysUsingTPM(Identity,EmailID)
+		print "Operation Success, Your Encrypted Private Key file name is: ", encryptedFileName," \n"
+
 	elif choice == '6':
-		decryptPrivateKeyUsingTPM()
+		fileName = raw_input("\n Enter the name of your encrypted private key ")
+		outputFileName = decryptPrivateKeyUsingTPM(fileName)
+		print " Your decrypted private key file name is : ", outputFileName
 	else:
 		print "Wrong Choice" 
 
