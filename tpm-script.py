@@ -41,22 +41,22 @@ def generateGPGkeys():
 		print(answer, op.stdin)
 		op.stdin.flush()
 
-def encryptData(filename):
-	op = Popen(["gpg", "--encrypt", "--recipient", "sfadnav1@jhu.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+def encryptData(filename, EmailID):
+	
+	op = Popen(["gpg", "--encrypt", "--recipient", EmailID, filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
 
-#	op = Popen(["gpg2", "--encrypt", "--recipient", "sfad@jh.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+	if(op.stdout):
+		for line in op.stdout:
+			if line.startswith("Use this key anyway?"):
+				answer = y	
 
-	for line in op.stdout:
-		if line.startswith("Use this key anyway?"):
-			answer = y	
+			print(answer, op.stdin)
+			op.stdin.flush()
 
-	print(answer, op.stdin)
-	op.stdin.flush()
-
-def decryptData():
-#	password = raw_input("Enter the password to your private key")
+def decryptData(encryptedFileName):
+	
 	password = getpass.getpass()
-	op = Popen(["gpg","--passphrase", password, "--decrypt", "plaintext2.txt.gpg"])
+	op = Popen(["gpg","--passphrase", password, "--decrypt", encryptedFileName])
 
 
 def encryptPrivateKeysUsingTPM(Identity,EmailID):
@@ -90,7 +90,7 @@ def decryptPrivateKeyUsingTPM(fileName_keyblob):
 
 def main():
 	print "Please select one of the following choices: "
-	print "1. List available GPG keys \n2. Generate GPG Keys \n3. Encrypt data \n4. Decrypt data \n 5. Encrypt Private keys using key in the TPM \n "
+	print "1. List available GPG keys \n2. Generate GPG Keys \n3. Encrypt data \n4. Decrypt data \n5. Encrypt Private keys using key in the TPM \n "
 	"6. Decrypt the private key using the key on the TPM \n"
 	choice  = raw_input("Enter your choice here: ")
 
@@ -99,14 +99,18 @@ def main():
 	elif choice == '2':
 		generateGPGkeys()
 	elif choice == '3':
-		filename = raw_input("Enter the name of the file to be encrypted")
+		filename = raw_input("\nEnter the name of the file to be encrypted\n")
+		EmailID = raw_input("\nEnter the Email ID\n")
+		
 		if os.path.isfile(filename):
-			encryptData(filename)
+			encryptData(filename,EmailID)
 		else:
 			print "File not found!"
 			 
 	elif choice == '4':
-		decryptData()
+		encryptedFileName = raw_input("\nEnter the encrypted file name\n")
+		decryptData(encryptedFileName)
+
 	elif choice == '5':
 		Identity = raw_input("\nEnter the identity for the public key generation\n")
 		# We need to put checks if the Email ID's and filename's exist
