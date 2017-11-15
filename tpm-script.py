@@ -12,6 +12,7 @@ def randomword(length):
    letters = string.ascii_lowercase
    return ''.join(random.choice(letters) for i in range(length))
 
+
 def listKeys(): 
 	op = Popen(["gpg", "--list-keys"], stdin = PIPE, stdout = PIPE)
 	print op.stdout.readlines()
@@ -24,7 +25,7 @@ def generateGPGkeys():
 	Popen(["sudo", "rngd", "-r", "/dev/urandom"])
 
 	# generate GPG keys
-	op = Popen(["gpg", "--gen-key"], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+	op = Popen(["gpg2", "--gen-key"], stdin=PIPE, stdout=PIPE, universal_newlines=True)
 	for line in op.stdout:
 		if line.startswith("Your selection?"):
 			answer = 1
@@ -41,7 +42,10 @@ def generateGPGkeys():
 		op.stdin.flush()
 
 def encryptData(filename):
-	op = Popen(["gpg", "--encrypt", "--recipient", "sfadnav1@jhu.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+#	op = Popen(["gpg", "--encrypt", "--recipient", "sfadnav1@jhu.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+
+	op = Popen(["gpg2", "--encrypt", "--recipient", "sfad@jh.edu", filename], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+
 	for line in op.stdout:
 		if line.startswith("Use this key anyway?"):
 			answer = y	
@@ -50,7 +54,12 @@ def encryptData(filename):
 	op.stdin.flush()
 
 def decryptData():
-	op = Popen(["gpg", "--decrypt", "plaintext.txt.gpg"])
+	op = Popen(["gpg2", "--decrypt", "plaintext2.txt.gpg"])
+#	for line in op.stdout:
+#		if line.startswith("Please enter"):
+#			answer = "password"
+#	print(answer, op.stdin)
+#	op.stdin.flush()
 
 def encryptPrivateKeysUsingTPM(Identity,EmailID):
 
