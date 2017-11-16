@@ -70,12 +70,26 @@ def encryptPrivateKeysUsingTPM(Identity,EmailID):
 	userPrivateKeyFileNameHelper = EmailID + "_privatekey.asc"
 	userEncryptedPrivateKeyFileNameHelper = EmailID + "_keyblob"
 
+	# Calling helper functions to Export keys into GPG before sealing them
 	_helper_ExportPrivateKey(Identity,userPrivateKeyFileNameHelper)
 	_helper_ExportPublicKey(EmailID,userPublicKeyFileNameHelper)
 
+	# Sealing the private key using the TPM secret key
 	cmd = "tpm_sealdata --infile " + userPrivateKeyFileNameHelper + " --outfile " + userEncryptedPrivateKeyFileNameHelper + " --pcr 0 --pcr 7"
-
 	os.system(cmd)
+
+	# Delete private key from gpg
+	cmd = "gpg --delete-secret-keys " + EmailID
+	os.system(cmd)
+
+	#Delete public key from gpg
+	cmd = "gpg --delete-keys " + EmailID
+	os.system(cmd)
+
+	# Removing the private key file from the system
+	cmd = "rm " +  userPrivateKeyFileNameHelper
+	os.system(cmd)
+	
 	return userEncryptedPrivateKeyFileNameHelper
 	
 def _helper_ExportPrivateKey(Identity,userPrivateKeyFileNameHelper):
