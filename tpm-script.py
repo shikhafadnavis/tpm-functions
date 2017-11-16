@@ -5,6 +5,7 @@
 
 from subprocess import Popen, PIPE
 import os.path
+import os
 import getpass
 import random, string
 
@@ -54,37 +55,44 @@ def encryptData(filename, EmailID):
 			op.stdin.flush()
 
 def decryptData(encryptedFileName):
+
+	unsealedPrivateKeyFileName = raw_input("\n Enter the name of your unsealed private key file \n")
 	
+	cmd = "gpg --import " + unsealedPrivateKeyFileName
+	os.system(cmd)	
 	password = getpass.getpass()
 	op = Popen(["gpg","--passphrase", password, "--decrypt", encryptedFileName])
 
 
 def encryptPrivateKeysUsingTPM(Identity,EmailID):
 
-	userPublicKeyFileNameHelper = "sfad" + "_publickey.asc"
-	userPrivateKeyFileNameHelper = "sfad" + "_privatekey.asc"
+	userPublicKeyFileNameHelper = EmailID + "_publickey.asc"
+	userPrivateKeyFileNameHelper = EmailID + "_privatekey.asc"
 	userEncryptedPrivateKeyFileNameHelper = EmailID + "_keyblob"
 
 	_helper_ExportPrivateKey(Identity,userPrivateKeyFileNameHelper)
 	_helper_ExportPublicKey(EmailID,userPublicKeyFileNameHelper)
 
-	op = Popen(["tpm_sealdata", "--infile", userPrivateKeyFileNameHelper, "--outfile",userEncryptedPrivateKeyFileNameHelper, "--pcr", "0", "--pcr", "7"], stdin=PIPE, stdout=PIPE,universal_newlines=True)
+	cmd = "tpm_sealdata --infile " + userPrivateKeyFileNameHelper + " --outfile " + userEncryptedPrivateKeyFileNameHelper + " --pcr 0 --pcr 7"
 
-	return userEncryptedPrivateKetFileNameHelper
+	os.system(cmd)
+	return userEncryptedPrivateKeyFileNameHelper
 	
 def _helper_ExportPrivateKey(Identity,userPrivateKeyFileNameHelper):
 
-	op = Popen(["gpg", "--export-secret-keys", "-a", Identity, ">", userPrivateKeyFileNameHelper])
+	cmd = "gpg " + "--export-secret-keys -a " + Identity + " > " + userPrivateKeyFileNameHelper
+	os.system(cmd)
 
 def _helper_ExportPublicKey(EmailID,userPublicKeyFileNameHelper):
 	
-	op = Popen(["gpg", "--armor", "--export", EmailID, ">",userPublicKeyFileNameHelper])
+	cmd = "gpg --armor --export " + EmailID + " > " + userPublicKeyFileNameHelper
+	os.system(cmd)
 
 def decryptPrivateKeyUsingTPM(fileName_keyblob):
 
 	outputFileName = randomword(10) + "_unsealedPrivate.key"
-
-	op = Popen(["tpm_unsealdata", "--infile", fileName_keyblob, "--outfile", outputFileName], stdin=PIPE, stdout=PIPE, universal_newlines=True)
+	cmd = "tpm_unsealdata --infile " + fileName_keyblob + " --outfile " + outputFileName
+	os.system(cmd)
 
 	return outputFileName
 
@@ -121,7 +129,7 @@ def main():
 		print "Operation Success, Your Encrypted Private Key file name is: ", encryptedFileName," \n"
 
 	elif choice == '6':
-		fileName = raw_input("\n Enter the name of your encrypted private key ")
+		fileName = raw_input("\nEnter the name of your encrypted private key ")
 		outputFileName = decryptPrivateKeyUsingTPM(fileName)
 		print " Your decrypted private key file name is : ", outputFileName
 	else:
