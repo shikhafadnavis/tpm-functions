@@ -61,9 +61,9 @@ def decryptData(encryptedFileName):
 
 def encryptPrivateKeysUsingTPM(Identity,EmailID):
 
-	userPublicKeyFileNameHelper = EmailID + "_publickey.asc"
-	userPrivateKeyFileNameHelper = EmailID + "privatekey.asc"
-	userEncryptedPrivateKeyFileNameHelper = EmaildID + "_keyblob"
+	userPublicKeyFileNameHelper = "sfad" + "_publickey.asc"
+	userPrivateKeyFileNameHelper = "sfad" + "_privatekey.asc"
+	userEncryptedPrivateKeyFileNameHelper = EmailID + "_keyblob"
 
 	_helper_ExportPrivateKey(Identity,userPrivateKeyFileNameHelper)
 	_helper_ExportPublicKey(EmailID,userPublicKeyFileNameHelper)
@@ -90,8 +90,8 @@ def decryptPrivateKeyUsingTPM(fileName_keyblob):
 
 def main():
 	print "Please select one of the following choices: "
-	print "1. List available GPG keys \n2. Generate GPG Keys \n3. Encrypt data \n4. Decrypt data \n5. Encrypt Private keys using key in the TPM \n "
-	"6. Decrypt the private key using the key on the TPM \n"
+	print "1. List available GPG keys \n2. Generate GPG Keys \n3. Encrypt data \n4. Decrypt data \n5. Encrypt Private keys using key in the TPM \n6. Decrypt the private key using the key on the TPM \n"
+
 	choice  = raw_input("Enter your choice here: ")
 
 	if choice == '1':
