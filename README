@@ -7,11 +7,13 @@ Details :
 This module implements TPM command line functionality in Python.
 ====================================================================
 It comprises of 5 functions:
-1. Generate GPG keys
-2. Encrypt data using GPG keys
-3. Decrypt data using GPG keys
-4. Encrypt GPG keys using TPM SRK
-5. Decrypt GPG keys using TPM SRK
+
+1. List gpg keys
+2. Generate GPG keys
+3. Encrypt data using GPG keys
+4. Decrypt data using GPG keys
+5. Encrypt GPG keys using TPM SRK
+6. Decrypt GPG keys using TPM SRK
 
 =====================================================================
 

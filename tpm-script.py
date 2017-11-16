@@ -15,32 +15,16 @@ def randomword(length):
 
 
 def listKeys(): 
-	op = Popen(["gpg", "--list-keys"], stdin = PIPE, stdout = PIPE)
-	print op.stdout.readlines()
-	#print ("stdout is: ", op.stdout.readlines()[2])
-	#print ("type of stdout is: ", type(op.stdout))
-	return op
+	
+	os.system("gpg --list-keys")
 
 def generateGPGkeys():
 	# generate randomness
 	Popen(["sudo", "rngd", "-r", "/dev/urandom"])
 
 	# generate GPG keys
-	op = Popen(["gpg2", "--gen-key"], stdin=PIPE, stdout=PIPE, universal_newlines=True)
-	for line in op.stdout:
-		if line.startswith("Your selection?"):
-			answer = 1
-		elif line.startswith("What keysize do you want?"):
-			answer = 2048
-		elif line.startswith("Key is valid for?"):
-			answer = 0
-		elif line.startswith("Is this correct?"):
-			answer = y 
-		else:
-			break
-
-		print(answer, op.stdin)
-		op.stdin.flush()
+	cmd = "gpg --gen-key"
+	os.system(cmd)
 
 def encryptData(filename, EmailID):
 	
