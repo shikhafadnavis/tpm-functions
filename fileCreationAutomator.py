@@ -43,7 +43,7 @@ def main():
 
     for i in range(0,count):
 	fileName = "test_file_" + str(i)
-	fileName = "/home/sfubuntu/" + fileName
+	fileName = directory + "/" + fileName
 	createFiles(fileName)
 
 def createFiles(fileName):
