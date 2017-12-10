@@ -7,9 +7,11 @@ import tpm_script as tpmFunctions
 # Holding Global variable here
 emailID1 = "sfad@fg.com"
 emailID2 = "vgop@fg.com"
+rootDirectory = "~/mfsdummy"
+space = " "
 
 class Watcher:
-    DIRECTORY_TO_WATCH = "/home/sfubuntu"
+    DIRECTORY_TO_WATCH = "/home/mnt/mfchunks2/00"
 
     def __init__(self):
         self.observer = Observer()
@@ -38,7 +40,11 @@ class Handler(FileSystemEventHandler):
         elif event.event_type == 'created':
             # Take any action here when a file is first created.
             # True indicates that the file is yet to be processed by the Encryption Engine
-            masterHandler(event.src_path)
+	    cmd = "cp " + event.src_path + space + rootDirectory
+            filename = _extractFileName(event.src_path)
+            realFilename = rootDirectory + "/" + filename
+            os.system(cmd)
+   #        masterHandler(realFilename)
 
 def encryptFile(filename, emailID):
         
@@ -51,14 +57,13 @@ def _getCurrentTime():
 def _extractFileName(filename):
 	
 	fileAll = filename.split("/")
-       	filename = fileAll[2]
+       	filename = fileAll[len(fileAll) - 1]
 	return filename
 
 def enigmaEngine(filename):
 
 	emailID1 = "sfad@fg.com"
         emailID2 = "vgop@fg.com"
-        filename = _extractFileName(filename)
         timeBefore = _getCurrentTime()
         encryptFile(filename,emailID1)
         timeAfter = _getCurrentTime()
