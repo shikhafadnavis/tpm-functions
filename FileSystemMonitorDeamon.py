@@ -4,8 +4,9 @@ from watchdog.events import FileSystemEventHandler
 import tpm_script as tpmFunctions
 
 #################################
-
-masterBookKeeper = []
+# Holding Global variable here
+emailID1 = "sfad@fg.com"
+emailID2 = "vgop@fg.com"
 
 class Watcher:
     DIRECTORY_TO_WATCH = "/home/sfubuntu"
@@ -53,24 +54,25 @@ def _extractFileName(filename):
        	filename = fileAll[2]
 	return filename
 
-def masterHandler(filename):
+def enigmaEngine(filename):
 
 	emailID1 = "sfad@fg.com"
         emailID2 = "vgop@fg.com"
-	filename = _extractFileName(filename)
-	timeBefore = _getCurrentTime()
-	encryptFile(filename,emailID1)
-	timeAfter = _getCurrentTime()
-	deltaEncryption = timeAfter - timeBefore
-	print"Operation took time - ", deltaEncryption
-	
+        filename = _extractFileName(filename)
+        timeBefore = _getCurrentTime()
+        encryptFile(filename,emailID1)
+        timeAfter = _getCurrentTime()
+        deltaEncryption = timeAfter - timeBefore
+        print"Operation took time - ", deltaEncryption
+
+def masterHandler(filename):
+
+	enigmaEngine(filename)	
 
 def main():
 	# Start the asycio event handler
 	w = Watcher()
 	w.run()
-	# Master Handler monitors for file changes
-	#masterHandler()
 
 if __name__ == "__main__":
         main()
