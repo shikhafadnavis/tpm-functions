@@ -18,7 +18,7 @@ gpg = gnupg.GPG(gnupghome="/home/testgpguser/gpghome")
 # User space routines
 def createKey():
         
-	input_data = gpg.gen_key_input(name_email = 'venky@fg.com', passphrase = 'venky')
+	input_data = gpg.gen_key_input(key_type = "RSA", key_length = 2048, name_email = 'venky@fg.com', passphrase = 'venky')
 
         return gpg.gen_key(input_data)
         
