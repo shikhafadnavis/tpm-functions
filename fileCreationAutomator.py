@@ -1,6 +1,6 @@
 import sys, random, string, os
 
-USAGE = """python fileCreationAutomator -directory=<root direcotory name> -c=<number of files to be created>"""
+#USAGE = """python fileCreationAutomator.py -directory=<root directory name> -c=<number of files to be created>"""
 
 def _randomCharacterGenerator():
 	random_val = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
@@ -36,13 +36,14 @@ def main():
 
     if "-c" in Args:
 	count = int(Args["-c"])
-	if count > 500 :
-		sys.exit("Number of files should be less than 500")
+	if count > 1000 :
+		sys.exit("Number of files should be less than or equal to 1000")
    
     print "Count = ", count, " and directory is ", directory 
 
     for i in range(0,count):
-	fileName = "test_file_" + str(i)
+	fileName = "tester12_file_" + str(i)
+	print "Processing file %s" % fileName
 	fileName = directory + "/" + fileName
 	createFiles(fileName)
 
