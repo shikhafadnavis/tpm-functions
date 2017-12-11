@@ -98,53 +98,5 @@ def decryptPrivateKeyUsingTPM(fileName_keyblob):
 
 	return outputFileName
 
-'''def main():
-	print "Please select one of the following choices: "
-	print "1. List available GPG keys \n2. Generate GPG Keys \n3. Encrypt data \n4. Decrypt data \n5. Encrypt Private keys using key in the TPM \n6. Decrypt the private key using the key on the TPM \n"
-
-	choice  = raw_input("Enter your choice here: ")
-
-	if choice == '1':
-		listKeys()
-	elif choice == '2':
-		generateGPGkeys()
-	elif choice == '3':
-		filename = raw_input("\nEnter the name of the file to be encrypted\n")
-		EmailID = raw_input("\nEnter the Email ID\n")
-		
-		if os.path.isfile(filename):
-			encryptData(filename,EmailID)
-		else:
-			print "File not found!"
-			 
-	elif choice == '4':
-		encryptedFileName = raw_input("\nEnter the encrypted file name\n")
-		decryptData(encryptedFileName)
-
-	elif choice == '5':
-		Identity = raw_input("\nEnter the identity for the public key generation\n")
-		# We need to put checks if the Email ID's and filename's exist
-                # Have to figure out a way for that
-		EmailID = raw_input("\nEnter the Email ID\n")
-		
-		encryptedFileName = encryptPrivateKeysUsingTPM(Identity,EmailID)
-		print "Operation Success, Your Encrypted Private Key file name is: ", encryptedFileName," \n"
-
-	elif choice == '6':
-		fileName = raw_input("\nEnter the name of your encrypted private key ")
-		outputFileName = decryptPrivateKeyUsingTPM(fileName)
-		print " Your decrypted private key file name is : ", outputFileName
-	else:
-		print "Wrong Choice" 
-
-
-
-
-if __name__ == "__main__":
-	main()
-
-
-'''
-
 
 

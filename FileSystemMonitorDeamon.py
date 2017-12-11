@@ -1,3 +1,7 @@
+# Date : 12/10/2017
+# File : FileSystemMonitorDaemon.py {For monitoring files on the fly}
+# Authors : Shikha Fadnavis and Venkatesh Gopal (Johns Hopkins University, Information Security Institute)
+
 import time, os, os.path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
