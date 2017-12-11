@@ -1,6 +1,10 @@
+# Date : 12/10/2017
+# File : fileCreationAutomator.py{For creating files on the fly}
+# Authors : Shikha Fadnavis and Venkatesh Gopal (Johns Hopkins University, Information Security Institute)
+
 import sys, random, string, os
 
-#USAGE = """python fileCreationAutomator.py -directory=<root directory name> -c=<number of files to be created>"""
+USAGE = """python fileCreationAutomator.py -directory=<root directory name> -c=<number of files to be created>"""
 
 def _randomCharacterGenerator():
 	random_val = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
