@@ -159,7 +159,7 @@ def main():
 		w.run()
 		
 	if MODE == 2:
-		os.chdir(MONITORING_DIRECTORY)
+		os.chdir(ROOT_DIRECTORY_S)
 		for file in glob.glob(".gpg):
 			
 			timeBefore = _getCurrentTime()
