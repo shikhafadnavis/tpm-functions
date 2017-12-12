@@ -2,23 +2,19 @@ import os, time
 import gnupg, sys
 from pprint import pprint
 import glob
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+
 ######################
 
 # Globally held data 
 # These can be overwritten by the API
 FILENAME = "mykey.asc"
-PLAINTEXT_FILE = "plaintext.txt"
 DEBUG = True
 # TODO - Change the monitoring directory name
-MONITORING_DIRECTORY = "/mnt/mfschunks2/00"
 master_list = []
 # MODE = 1 for encryption and 2 for decryption
 ROOT_MODE = 1
 MODE = 0
-ROOT_DIRECTORY_V = "/home/venky/dummy"
-ROOT_DIRECTORY_S = "/home/sfubuntu1422/mfsdummy"
+ROOT_DIRECTORY_V = "./"
 
 # Global GPG Initialization
 
@@ -100,45 +96,6 @@ def getStatistics(master_list):
 	average = (sum(master_list))/number_of_files
 	return average, number_of_files
 	
-class Watcher:
-    DIRECTORY_TO_WATCH = "/mnt/mfschunks2/00"
-
-    def __init__(self):
-        self.observer = Observer()
-
-    def run(self):
-        event_handler = Handler()
-        self.observer.schedule(event_handler, self.DIRECTORY_TO_WATCH, recursive=True)
-        self.observer.start()
-        try:
-            while True:
-                time.sleep(5)
-        except:
-            self.observer.stop()
-            print "Error"
-
-        self.observer.join()
-
-
-class Handler(FileSystemEventHandler):
-
-    @staticmethod
-    def on_any_event(event):
-	encryption_counter = 0
-        if event.is_directory:
-            return None
-
-        elif event.event_type == 'created':
-            # Take any action here when a file is first created.
-            # True indicates that the file is yet to be processed by the Encryption Engine
-            #print "Event received for file %s" % event.src_path
-	    cmd = "cp " + event.src_path + space + ROOT_DIRECTORY_S
-            #print "Finished copying"
-            filename = _extractFileName(event.src_path)
-            realFilename = ROOT_DIRECTORY_S + "/" + filename
-            os.system(cmd)
-            cencryptedFileName = encryptionEngine(realFilename, DEBUG)
-            
 
 			
 def main():
@@ -151,16 +108,18 @@ def main():
 		importKeysIntoGPG(FILENAME, DEBUG)
 #	listAvailableKeys()
 
-	#encryptedFileName = encryptionEngine(PLAINTEXT_FILE, DEBUG)
-	# TODO - Change the monitoring directory name
 	if MODE == 1:
 		
-		w = Watcher()
-		w.run()
+		
+		importKeysIntoGPG(FILENAME, DEBUG)
+		for file in glob.glob(".txt"):
+			encryptedFileName = encryptionEngine(file, DEBUG)
+			
+		print "Encryption done for all files"
 		
 	if MODE == 2:
-		os.chdir(ROOT_DIRECTORY_S)
-		for file in glob.glob(".gpg"):
+	
+		for file in glob.glob(".txt.gpg"):
 			
 			timeBefore = _getCurrentTime()
 			recoveredFileName = decryptionEngine(encryptedFileName, DEBUG)
