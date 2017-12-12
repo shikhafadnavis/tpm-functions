@@ -12,14 +12,17 @@ FILENAME = "mykey.asc"
 PLAINTEXT_FILE = "plaintext.txt"
 DEBUG = True
 # TODO - Change the monitoring directory name
-MONITORING_DIRECTORY = "./"
+MONITORING_DIRECTORY = "/mnt/mfschunks2/00"
 master_list = []
 # MODE = 1 for encryption and 2 for decryption
+ROOT_MODE = 1
 MODE = 1
+ROOT_DIRECTORY_V = "/home/venky/dummy"
+ROOT_DIRECTORY_S = "/home/sfubuntu/dummyMFS"
 
 # Global GPG Initialization
 
-if os.path.exists("/home/testgpguser/gpghome"):
+if os.path.exists("/home/sfubuntu/gpghome"):
 	os.system("rm -r /home/testgpguser/gpghome")
 
 gpg = gnupg.GPG(gnupghome="/home/testgpguser/gpghome")
@@ -129,10 +132,10 @@ class Handler(FileSystemEventHandler):
             # Take any action here when a file is first created.
             # True indicates that the file is yet to be processed by the Encryption Engine
             #print "Event received for file %s" % event.src_path
-	    cmd = "cp " + event.src_path + space + rootDirectory
+	    cmd = "cp " + event.src_path + space + ROOT_DIRECTORY_S
             #print "Finished copying"
             filename = _extractFileName(event.src_path)
-            realFilename = rootDirectory + "/" + filename
+            realFilename = ROOT_DIRECTORY_S + "/" + filename
             os.system(cmd)
 			encryptedFileName = encryptionEngine(realFilename, DEBUG)
             
@@ -140,10 +143,12 @@ class Handler(FileSystemEventHandler):
 			
 def main():
 	
+	# Use the below condition only to generate new keys
 	
-	key = createKey()
-	exportKey(key,FILENAME)
-	importKeysIntoGPG(FILENAME, DEBUG)
+	if ROOT_MODE == 1:
+		key = createKey()
+		exportKey(key,FILENAME)
+		importKeysIntoGPG(FILENAME, DEBUG)
 #	listAvailableKeys()
 
 	#encryptedFileName = encryptionEngine(PLAINTEXT_FILE, DEBUG)
