@@ -106,7 +106,7 @@ def main():
 	if ROOT_MODE == 1:
 		key = createKey()
 		exportKey(key,FILENAME)
-		importKeysIntoGPG(FILENAME, DEBUG)
+		importKeysIntoGPG(FILENAME, False)
 #	listAvailableKeys()
 
 	if MODE == 1:
@@ -115,22 +115,21 @@ def main():
 	#	importKeysIntoGPG(FILENAME, DEBUG)
 		os.chdir("./")
 		for file in glob.glob("*.txt"):
-			print "I'm here"
-			encryptedFileName = encryptionEngine(file, DEBUG)
+			encryptedFileName = encryptionEngine(file, False)
 			
-		print "Encryption done for all files"
+
+		#############################	
+		print "Starting decryption"
+		for file in glob.glob("*.txt.gpg"):
 		
-	if MODE == 2:
-	
-		for file in glob.glob(".txt.gpg"):
-			
 			timeBefore = _getCurrentTime()
-			recoveredFileName = decryptionEngine(encryptedFileName, DEBUG)
+			recoveredFileName = decryptionEngine(encryptedFileName, False)
 			timeAfter = _getCurrentTime()
 			timeDelta = timeAfter - timeBefore
 			master_list.append(timeDelta)
 		
 		mean, number_of_files = getStatistics(master_list)
+		print "Mean and Number of files and Total time is ", mean, number_of_files, mean*number_of_files
 	
 if __name__=="__main__":
 	main()

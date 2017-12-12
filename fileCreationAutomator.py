@@ -40,13 +40,13 @@ def main():
 
     if "-c" in Args:
 	count = int(Args["-c"])
-	if count > 1000 :
+	if count > 10000 :
 		sys.exit("Number of files should be less than or equal to 1000")
    
     print "Count = ", count, " and directory is ", directory 
 
     for i in range(0,count):
-	fileName = "tester12_file_" + str(i)
+	fileName = "tester_file_" + str(i) + ".txt"
 	print "Processing file %s" % fileName
 	fileName = directory + "/" + fileName
 	createFiles(fileName)
