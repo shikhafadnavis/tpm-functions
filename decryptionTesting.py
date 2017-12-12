@@ -16,9 +16,9 @@ MONITORING_DIRECTORY = "/mnt/mfschunks2/00"
 master_list = []
 # MODE = 1 for encryption and 2 for decryption
 ROOT_MODE = 1
-MODE = 1
+MODE = 0
 ROOT_DIRECTORY_V = "/home/venky/dummy"
-ROOT_DIRECTORY_S = "/home/sfubuntu/dummyMFS"
+ROOT_DIRECTORY_S = "/home/sfubuntu1422/mfsdummy"
 
 # Global GPG Initialization
 
@@ -137,7 +137,7 @@ class Handler(FileSystemEventHandler):
             filename = _extractFileName(event.src_path)
             realFilename = ROOT_DIRECTORY_S + "/" + filename
             os.system(cmd)
-			encryptedFileName = encryptionEngine(realFilename, DEBUG)
+            cencryptedFileName = encryptionEngine(realFilename, DEBUG)
             
 
 			
@@ -160,7 +160,7 @@ def main():
 		
 	if MODE == 2:
 		os.chdir(ROOT_DIRECTORY_S)
-		for file in glob.glob(".gpg):
+		for file in glob.glob(".gpg"):
 			
 			timeBefore = _getCurrentTime()
 			recoveredFileName = decryptionEngine(encryptedFileName, DEBUG)
@@ -170,5 +170,6 @@ def main():
 		
 		mean, number_of_files = getStatistics(master_list)
 	
-
+if __name__=="__main__":
+	main()
 
