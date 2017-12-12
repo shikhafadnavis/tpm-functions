@@ -13,12 +13,12 @@ DEBUG = True
 master_list = []
 # MODE = 1 for encryption and 2 for decryption
 ROOT_MODE = 1
-MODE = 0
+MODE = 1
 ROOT_DIRECTORY_V = "./"
 
 # Global GPG Initialization
 
-if os.path.exists("/home/sfubuntu/gpghome"):
+if os.path.exists("/home/testgpguser/gpghome"):
 	os.system("rm -r /home/testgpguser/gpghome")
 
 gpg = gnupg.GPG(gnupghome="/home/testgpguser/gpghome")
@@ -62,6 +62,7 @@ def listAvailableKeys():
 def encryptionEngine(fileName, flag):
 	
 	encryptedFileName = fileName + ".gpg"
+	print "Encrypted file name is %s" % encryptedFileName
 	with open(fileName, 'rb') as fo:
 	
 		status = gpg.encrypt_file(fo, recipients = ['venky@fg.com'], output = encryptedFileName)
@@ -111,8 +112,10 @@ def main():
 	if MODE == 1:
 		
 		
-		importKeysIntoGPG(FILENAME, DEBUG)
-		for file in glob.glob(".txt"):
+	#	importKeysIntoGPG(FILENAME, DEBUG)
+		os.chdir("./")
+		for file in glob.glob("*.txt"):
+			print "I'm here"
 			encryptedFileName = encryptionEngine(file, DEBUG)
 			
 		print "Encryption done for all files"
