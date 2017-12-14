@@ -1,7 +1,7 @@
 import os, time
 import gnupg, sys
 from pprint import pprint
-import glob
+import glob, numpy
 
 ######################
 
@@ -129,7 +129,9 @@ def main():
 			master_list.append(timeDelta)
 		
 		mean, number_of_files = getStatistics(master_list)
+		sd = numpy.std(master_list, axis=0)
 		print "Mean and Number of files and Total time is ", mean, number_of_files, mean*number_of_files
+		print "Standard deviation: ", sd
 	
 if __name__=="__main__":
 	main()
